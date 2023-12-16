@@ -1,53 +1,42 @@
-pipelines:
-  - name: Docker_Build_Push_Test
+resources:
+  - name: dbp_repo
+    type: GitRepo
     configuration:
-      jfrogCliVersion: 2  
+      gitProvider: github_token                    # <-- replace with your integration
+      path: rimusz/jfrog-pipelines-docker-example # <-- replace with your repository name
+      branches:
+        include: ^main$
+      buildOn:
+        commit: true
+        pullRequestCreate: false
+        tagCreate: false
+
+pipelines:
+  - name: Docker_Build_Push_Test1
+    configuration:
+      integrations:
+        - name: myArtifactory
     steps:
       - name: docker_build
-        type: DockerBuild
+        type: Bash
         configuration:
           affinityGroup: dbp_group
-          dockerFileLocation: .
-          dockerFileName: Dockerfile
-          dockerImageName: pipelines.jfrog.io/docker-local-dev/dbp  # replace with your image path and name
-          dockerImageTag: ${run_number}
+          inputResources:
+            - name: dbp_repo
+              trigger: true
+        execution:
+          onExecute:
+            - echo "Building docker image"
+            - docker build -t pipelines.jfrog.io/docker-local-dev/dbp:${run_number} .
+      - name: docker_push
+        type: Bash
+        configuration:
+          affinityGroup: dbp_group
           inputResources:
             - name: dbp_repo
           integrations:
-            - name: myArtifactory                           # <-- replace with your artifactory integration
+            - name: myArtifactory
         execution:
-          onStart:
-              - update_run_description "Build and push Docker image to Artifactory."
-
-      - name: docker_push
-        type: DockerPush
-        configuration:
-          affinityGroup: dbp_group
-          targetRepository: docker-local-dev
-          integrations:
-            - name: myArtifactory                            # <-- replace with your artifactory integration
-          inputSteps:
-            - name: docker_build
-          outputResources:
-            - name: dbp_image           
-
-      - name: publish_dbp_build
-        type: PublishBuildInfo
-        configuration:
-          inputSteps:
-            - name: docker_push
-          integrations:
-            - name: myArtifactory
-          outputResources:
-            - name: dbp_build_info
-
-      - name: promote_dbp_build
-        type: PromoteBuild
-        configuration:
-          targetRepository: docker-local-staging
-          integrations:
-            - name: myArtifactory
-          inputResources:
-            - name: dbp_build_info
-          outputResources:
-            - name: dbp_promoted_build_info
+          onExecute:
+            - echo "Pushing docker image"
+            - docker push pipelines.jfrog.io/docker-local-dev/dbp:${run_number}
