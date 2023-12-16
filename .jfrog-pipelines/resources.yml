@@ -14,7 +14,7 @@ resources:
   - name: dbp_image
     type: Image
     configuration:
-      registry: art_token                                # <-- replace with your artifactory integration
+      registry: myArtifactoryRegistry                                # <-- replace with your artifactory integration
       sourceRepository: docker-local                    # <-- required if registry is Artifactory
       imageName: jfrog-platform.kube-lab.xyz/docker-local/dbp  # < -- replace with your image path and name
       imageTag: latest
@@ -23,13 +23,13 @@ resources:
   - name: dbp_build_info
     type: BuildInfo
     configuration:
-      sourceArtifactory: art_token 
+      sourceArtifactory: myArtifactory
       buildName: dbp_build
       buildNumber: 1    
 
   - name: dbp_promoted_build_info
     type: BuildInfo
     configuration:
-      sourceArtifactory: art_token 
+      sourceArtifactory: myArtifactory
       buildName: dbp_build
       buildNumber: 1

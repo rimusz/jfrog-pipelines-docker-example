@@ -39,7 +39,7 @@ pipelines:
           integrations:
             - name: myArtifactory
           outputResources:
-            - name: dbp_build_info          
+            - name: dbp_build_info
 
       - name: promote_dbp_build
         type: PromoteBuild
