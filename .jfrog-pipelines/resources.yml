@@ -15,8 +15,8 @@ resources:
     type: Image
     configuration:
       registry: myArtifactoryRegistry                                # <-- replace with your artifactory integration
-      sourceRepository: docker-local                    # <-- required if registry is Artifactory
-      imageName: jfrog-platform.kube-lab.xyz/docker-local/dbp  # < -- replace with your image path and name
+      sourceRepository: docker-local-dev                            # <-- required if registry is Artifactory
+      imageName: jfrog-platform.kube-lab.xyz/docker-local-dev/dbp  # < -- replace with your image path and name
       imageTag: latest
       autoPull: true
       

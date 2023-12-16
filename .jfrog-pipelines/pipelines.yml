@@ -9,7 +9,7 @@ pipelines:
           affinityGroup: dbp_group
           dockerFileLocation: .
           dockerFileName: Dockerfile
-          dockerImageName: pipelines.jfrog.io/docker-local/dbp  # replace with your image path and name
+          dockerImageName: pipelines.jfrog.io/docker-local-dev/dbp  # replace with your image path and name
           dockerImageTag: ${run_number}
           inputResources:
             - name: dbp_repo
@@ -23,7 +23,7 @@ pipelines:
         type: DockerPush
         configuration:
           affinityGroup: dbp_group
-          targetRepository: docker-local
+          targetRepository: docker-local-dev
           integrations:
             - name: myArtifactory                            # <-- replace with your artifactory integration
           inputSteps:
