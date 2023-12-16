@@ -1,5 +1,5 @@
 pipelines:
-  - name: Docker_Build_Push
+  - name: Docker_Build_Push_Test
     configuration:
       jfrogCliVersion: 2  
     steps:
