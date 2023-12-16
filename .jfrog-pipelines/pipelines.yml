@@ -34,8 +34,6 @@ pipelines:
           affinityGroup: dbp_group
           inputResources:
             - name: dbp_repo
-          integrations:
-            - name: myArtifactory
         execution:
           onExecute:
             - echo "Pushing docker image"
