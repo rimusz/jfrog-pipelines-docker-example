@@ -1,0 +1,51 @@
+pipelines:
+  - name: Docker_Build_Push
+    configuration:
+      jfrogCliVersion: 2  
+    steps:
+      - name: docker_build
+        type: DockerBuild
+        configuration:
+          affinityGroup: dbp_group
+          dockerFileLocation: .
+          dockerFileName: Dockerfile
+          dockerImageName: pipelines.jfrog.io/docker-local/dbp  # replace with your image path and name
+          dockerImageTag: ${run_number}
+          inputResources:
+            - name: dbp_repo
+          integrations:
+            - name: art_token                           # <-- replace with your artifactory integration
+        execution:
+          onStart:
+              - update_run_description "Build and push Docker image to Artifactory."
+
+      - name: docker_push
+        type: DockerPush
+        configuration:
+          affinityGroup: dbp_group
+          targetRepository: docker-local
+          integrations:
+            - name: art_token                            # <-- replace with your artifactory integration
+          inputSteps:
+            - name: docker_build
+          outputResources:
+            - name: dbp_image           
+
+      - name: publish_dbp_build
+        type: PublishBuildInfo
+        configuration:
+          inputSteps:
+            - name: docker_push
+          outputResources:
+            - name: dbp_build_info          
+
+      - name: promote_dbp_build
+        type: PromoteBuild
+        configuration:
+          targetRepository: docker-local-staging
+          integrations:
+            - name: art_token
+          inputResources:
+            - name: dbp_build_info
+          outputResources:
+            - name: dbp_promoted_build_info
