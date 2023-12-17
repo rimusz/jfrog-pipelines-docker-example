@@ -26,6 +26,7 @@ pipelines:
               trigger: true
         execution:
           onExecute:
+            - cd ${res_dbp_repo_resourcePath}
             - echo "Building docker image"
             - docker build -t jfrog-platform.kube-lab.xyz/docker-local-dev/dbp:${run_number} .
       - name: docker_push
