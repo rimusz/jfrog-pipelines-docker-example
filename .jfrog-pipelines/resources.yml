@@ -1,35 +1,32 @@
 resources:
-  - name: dbp_repo
-    type: GitRepo
-    configuration:
-      gitProvider: github_token                    # <-- replace with your integration
-      path: rimusz/jfrog-pipelines-docker-example # <-- replace with your repository name
-      branches:
-        include: ^main$
-      buildOn:
-        commit: true
-        pullRequestCreate: false
-        tagCreate: false
-
-  - name: dbp_image
-    type: Image
-    configuration:
-      registry: myArtifactoryRegistry                                # <-- replace with your artifactory integration
-      sourceRepository: docker-local-dev                            # <-- required if registry is Artifactory
-      imageName: jfrog-platform.kube-lab.xyz/docker-local-dev/dbp  # < -- replace with your image path and name
-      imageTag: latest
-      autoPull: true
-      
-  - name: dbp_build_info
-    type: BuildInfo
-    configuration:
-      sourceArtifactory: myArtifactory
-      buildName: dbp_build
-      buildNumber: 1    
-
-  - name: dbp_promoted_build_info
-    type: BuildInfo
-    configuration:
-      sourceArtifactory: myArtifactory
-      buildName: dbp_build
-      buildNumber: 1
+- name: dbp_repo
+  type: GitRepo
+  configuration:
+    gitProvider: myGithub
+    path: rimusz/jfrog-pipelines-docker-example
+    branches:
+      include: ^main$
+    buildOn:
+      commit: true
+      pullRequestCreate: false
+      tagCreate: false
+- name: dbp_image
+  type: Image
+  configuration:
+    registry: myArtifactoryRegistry
+    sourceRepository: docker-local-dev
+    imageName: jfrog-platform.kube-lab.xyz/docker-local-dev/dbp
+    imageTag: latest
+    autoPull: true
+- name: dbp_build_info
+  type: BuildInfo
+  configuration:
+    sourceArtifactory: myArtifactory
+    buildName: dbp_build
+    buildNumber: 1
+- name: dbp_promoted_build_info
+  type: BuildInfo
+  configuration:
+    sourceArtifactory: myArtifactory
+    buildName: dbp_build
+    buildNumber: 1
