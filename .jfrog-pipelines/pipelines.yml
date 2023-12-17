@@ -27,7 +27,7 @@ pipelines:
         execution:
           onExecute:
             - echo "Building docker image"
-            - docker build -t pipelines.jfrog.io/docker-local-dev/dbp:${run_number} .
+            - docker build -t jfrog-platform.kube-lab.xyz/docker-local-dev/dbp:${run_number} .
       - name: docker_push
         type: Bash
         configuration:
@@ -37,4 +37,4 @@ pipelines:
         execution:
           onExecute:
             - echo "Pushing docker image"
-            - docker push pipelines.jfrog.io/docker-local-dev/dbp:${run_number}
+            - docker push jfrog-platform.kube-lab.xyz/docker-local-dev/dbp:${run_number}
